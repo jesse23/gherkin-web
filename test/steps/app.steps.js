@@ -16,3 +16,4 @@ When('I click the button', async function() {
 Then('I should see the count increase to {string}', async function(count) {
     await expect(this.page.locator('button:has-text("count is")')).toContainText(`count is ${count}`);
 }); 
+
