@@ -15,5 +15,17 @@ When('I click the button', async function() {
 
 Then('I should see the count increase to {string}', async function(count) {
     await expect(this.page.locator('button:has-text("count is")')).toContainText(`count is ${count}`);
+});
+
+When('I type {string} into the text input', async function(text) {
+    await this.page.locator('#textInput').fill(text);
+});
+
+When('I clear the text input', async function() {
+    await this.page.locator('#textInput').fill('');
+});
+
+Then('I should see {string} displayed in the text value', async function(expectedText) {
+    await expect(this.page.locator('#textValue')).toContainText(expectedText);
 }); 
 

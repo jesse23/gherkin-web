@@ -9,20 +9,24 @@
       "import": "./dist/index.js"
     },
     "./cucumber": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/cucumber.d.ts",
       "import": "./dist/cucumber.js"
     },
     "./gherkin": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/gherkin.d.ts",
       "import": "./dist/gherkin.js"
     },
     "./playwright": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/playwright.d.ts",
       "import": "./dist/playwright.js"
     },
-    "./types": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/types.js"
+    "./puppeteer": {
+      "types": "./dist/puppeteer.d.ts",
+      "import": "./dist/puppeteer.js"
+    },
+    "./assert": {
+      "types": "./dist/assert.d.ts",
+      "import": "./dist/assert.js"
     }
   },
   "scripts": {

@@ -1,8 +1,8 @@
-
 interface Locator {
   click(): Promise<void>;
   toBeVisible(): Promise<boolean>;
   toContainText(text: string): Promise<boolean>;
+  fill(value: string): Promise<void>;
 }
 
 interface PageObject {
@@ -18,7 +18,7 @@ interface BrowserContext {
 interface Browser {
   newContext(): BrowserContext;
   close(): Promise<void>;
-} 
+}
 
 interface SelectorInfo {
   element: string;
@@ -66,7 +66,24 @@ const createPageObject = (): PageObject => ({
       
       async toContainText(expectedText: string): Promise<boolean> {
         const el = text ? findElementWithText(element, text) : document.querySelector(element);
+        if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+          return el.value.includes(expectedText);
+        }
         return el?.textContent?.includes(expectedText) ?? false;
+      },
+
+      async fill(value: string): Promise<void> {
+        const el = text ? findElementWithText(element, text) : document.querySelector(element);
+        // https://stackoverflow.com/questions/23892547/what-is-the-best-way-to-trigger-change-or-input-event-in-react-js
+        if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype,
+            'value'
+          )?.set;
+          nativeInputValueSetter?.call(el, value);
+          const event = new Event('input', { bubbles: true });
+          el.dispatchEvent(event);
+        }
       }
     };
   },

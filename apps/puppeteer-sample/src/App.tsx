@@ -28,10 +28,10 @@ function App() {
         </button>
         <div className="input-group">
           <label htmlFor="textInput">Enter text:</label>
-          <input
+          <input 
             id="textInput"
-            type="text"
-            value={text}
+            type="text" 
+            value={text} 
             onChange={(e) => setText(e.target.value)}
             placeholder="Type something..."
           />
@@ -50,4 +50,4 @@ function App() {
   )
 }
 
-export default App 
+export default App

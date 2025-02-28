@@ -1,4 +1,26 @@
-import { Step, CucumberWorld, StepStore, Hooks, StepImplementation, HookImplementation } from './types';
+interface Step {
+  keyword: string;
+  text: string;
+}
+
+interface CucumberWorld {
+  [key: string]: any;
+}
+
+type StepImplementation = (this: CucumberWorld, ...args: any[]) => Promise<void> | void;
+type HookImplementation = (this: CucumberWorld) => Promise<void> | void;
+
+interface StepStore {
+  given: Map<string, StepImplementation>;
+  when: Map<string, StepImplementation>;
+  then: Map<string, StepImplementation>;
+}
+
+interface Hooks {
+  before: HookImplementation[];
+  after: HookImplementation[];
+}
+
 
 const stepStore: StepStore = {
   given: new Map(),
@@ -18,6 +40,9 @@ export class World implements CucumberWorld {
 
 // World constructor storage
 let WorldConstructor: new () => CucumberWorld = World;
+
+// Keep track of the last step type
+let lastStepType: keyof StepStore = 'given';
 
 // Convert Cucumber expression to regex pattern
 const convertToRegex = (pattern: string): RegExp => {
@@ -49,7 +74,15 @@ const addStepDefinition = (type: keyof StepStore, pattern: string, implementatio
 
 // Helper to find and execute step
 const executeStep = async (context: World, type: string, text: string): Promise<void> => {
-  const store = stepStore[type.toLowerCase() as keyof StepStore];
+  // Handle 'and' by using the last step type
+  const stepType = type.toLowerCase() === 'and' ? lastStepType : type.toLowerCase() as keyof StepStore;
+  
+  // Update last step type for next 'and'
+  if (type.toLowerCase() !== 'and') {
+    lastStepType = stepType as keyof StepStore;
+  }
+  
+  const store = stepStore[stepType];
   const match = findMatchingStep(store, text);
   
   if (match) {
@@ -77,6 +110,9 @@ const executeAfter = async (context: World): Promise<void> => {
 // Execute a complete scenario with hooks and steps
 export const executeScenario = async (scenarioName: string, steps: Step[]): Promise<void> => {
   console.log(`\nExecuting Scenario: ${scenarioName}`);
+  
+  // Reset last step type at the start of each scenario
+  lastStepType = 'given';
   
   // Create context using World constructor
   const context = new WorldConstructor();

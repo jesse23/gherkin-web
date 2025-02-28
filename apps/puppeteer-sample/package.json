@@ -1,0 +1,35 @@
+{
+  "name": "puppeteer-sample",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build:deps": "npm run build -w @gherkin-web/core",
+    "dev": "npm run build:deps && vite",
+    "build": "npm run build:deps && tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test:e2e": "cucumber-js test/features --import 'test/{support,steps}/*.js'"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^10.3.1",
+    "@cucumber/pretty-formatter": "^1.0.0",
+    "@eslint/js": "^9.21.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react-swc": "^3.8.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "puppeteer": "^22.1.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0",
+    "@gherkin-web/core": "*"
+  }
+}

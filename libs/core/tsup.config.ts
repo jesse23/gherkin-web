@@ -18,9 +18,11 @@ export default defineConfig([
       'src/cucumber.ts',
       'src/gherkin.ts',
       'src/playwright.ts',
+      'src/puppeteer.ts',
+      'src/assert.ts',
     ],
     format: ['esm'],
-    dts: false,
+    dts: true,
     clean: false,
     sourcemap: true,
     splitting: false,
@@ -29,7 +31,9 @@ export default defineConfig([
     external: [
       './cucumber',
       './gherkin', 
-      './playwright'
+      './playwright',
+      './puppeteer',
+      './assert'
     ]
   }
 ]); 
