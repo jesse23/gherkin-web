@@ -1,0 +1,47 @@
+{
+  "name": "@gherkin-web/core",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./cucumber": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/cucumber.js"
+    },
+    "./gherkin": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/gherkin.js"
+    },
+    "./playwright": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/playwright.js"
+    },
+    "./types": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/types.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/**/*.ts",
+    "clean": "rm -rf dist",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@cucumber/gherkin": "^27.0.0",
+    "@cucumber/messages": "^22.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.19",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3"
+  }
+} 

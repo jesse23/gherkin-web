@@ -34,9 +34,18 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@cucumber/cucumber': '/src/services/cucumber.js',
-      '@playwright/test': '/src/services/playwright.js'
+      '@cucumber/cucumber': '@gherkin-web/core/cucumber',
+      '@playwright/test': '@gherkin-web/core/playwright'
+     /*
+      '@cucumber/cucumber': '/src/services/cucumber',
+      '@playwright/test': '/src/services/playwright'
+      */
     }
   },
+  /*
+  optimizeDeps: {
+    include: ['@gherkin-web/core']
+  },
+  */
   publicDir: 'test',
 })

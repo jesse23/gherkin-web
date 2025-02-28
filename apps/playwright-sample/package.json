@@ -1,0 +1,35 @@
+{
+  "name": "playwright-sample-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build:deps": "npm run build -w @gherkin-web/core",
+    "dev": "npm run build:deps && vite",
+    "build": "npm run build:deps && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test:e2e": "cucumber-js test/features --import 'test/{support,steps}/*.js'"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react-swc": "^3.8.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "vite": "^6.2.0",
+    "@cucumber/cucumber": "^9.1.0",
+    "@playwright/test": "^1.35.0",
+    "@babel/core": "^7.22.5",
+    "@babel/register": "^7.22.5",
+    "@gherkin-web/core": "*"
+  }
+}

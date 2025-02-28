@@ -1,27 +1,26 @@
-// Simple store for step definitions and hooks
-const stepStore = {
+import { Step, CucumberWorld, StepStore, Hooks, StepImplementation, HookImplementation } from './types';
+
+const stepStore: StepStore = {
   given: new Map(),
   when: new Map(),
   then: new Map()
 };
 
-const hooks = {
+const hooks: Hooks = {
   before: [],
   after: []
 };
 
 // Default World class
-export class World {
+export class World implements CucumberWorld {
   constructor() {}
 }
 
 // World constructor storage
-let WorldConstructor = World;
-
-
+let WorldConstructor: new () => CucumberWorld = World;
 
 // Convert Cucumber expression to regex pattern
-const convertToRegex = (pattern) => {
+const convertToRegex = (pattern: string): RegExp => {
   const regexPattern = pattern
     .replace(/{string}/g, '"([^"]*)"')
     .replace(/{(\w+)}/g, '([^\\s]*)');
@@ -29,7 +28,7 @@ const convertToRegex = (pattern) => {
 };
 
 // Helper to find matching pattern and extract parameters
-const findMatchingStep = (store, text) => {
+const findMatchingStep = (store: Map<string, StepImplementation>, text: string) => {
   for (const [pattern, implementation] of store.entries()) {
     if (typeof pattern === 'string') {
       const regex = convertToRegex(pattern);
@@ -44,13 +43,13 @@ const findMatchingStep = (store, text) => {
 };
 
 // Helper to add step definition with context
-const addStepDefinition = (type, pattern, implementation) => {
-  stepStore[type.toLowerCase()].set(pattern, implementation);
+const addStepDefinition = (type: keyof StepStore, pattern: string, implementation: StepImplementation): void => {
+  stepStore[type.toLowerCase() as keyof StepStore].set(pattern, implementation);
 };
 
 // Helper to find and execute step
-const executeStep = async (context, type, text) => {
-  const store = stepStore[type.toLowerCase()];
+const executeStep = async (context: World, type: string, text: string): Promise<void> => {
+  const store = stepStore[type.toLowerCase() as keyof StepStore];
   const match = findMatchingStep(store, text);
   
   if (match) {
@@ -62,21 +61,21 @@ const executeStep = async (context, type, text) => {
 };
 
 // Execute all registered before hooks
-const executeBefore = async (context) => {
+const executeBefore = async (context: World): Promise<void> => {
   for (const beforeHook of hooks.before) {
     await beforeHook.apply(context);
   }
 };
 
 // Execute all registered after hooks
-const executeAfter = async (context) => {
+const executeAfter = async (context: World): Promise<void> => {
   for (const afterHook of hooks.after) {
     await afterHook.apply(context);
   }
 };
 
 // Execute a complete scenario with hooks and steps
-export const executeScenario = async (scenarioName, steps) => {
+export const executeScenario = async (scenarioName: string, steps: Step[]): Promise<void> => {
   console.log(`\nExecuting Scenario: ${scenarioName}`);
   
   // Create context using World constructor
@@ -98,15 +97,27 @@ export const executeScenario = async (scenarioName, steps) => {
 };
 
 // Set custom World constructor
-export const setWorldConstructor = (constructor) => {
+export const setWorldConstructor = (constructor: new () => World): void => {
   WorldConstructor = constructor;
 };
 
 // Convenience methods for adding steps
-export const Given = (pattern, implementation) => addStepDefinition('given', pattern, implementation);
-export const When = (pattern, implementation) => addStepDefinition('when', pattern, implementation);
-export const Then = (pattern, implementation) => addStepDefinition('then', pattern, implementation);
+export const Given = (pattern: string, implementation: StepImplementation): void => 
+  addStepDefinition('given', pattern, implementation);
+
+export const When = (pattern: string, implementation: StepImplementation): void => 
+  addStepDefinition('when', pattern, implementation);
+
+export const Then = (pattern: string, implementation: StepImplementation): void => 
+  addStepDefinition('then', pattern, implementation);
 
 // Hook registration methods
-export const Before = (implementation) => hooks.before.push(implementation);
-export const After = (implementation) => hooks.after.push(implementation);
+export const Before = (implementation: HookImplementation): number => {
+  hooks.before.push(implementation);
+  return hooks.before.length;
+};
+
+export const After = (implementation: HookImplementation): number => {
+  hooks.after.push(implementation);
+  return hooks.after.length;
+}; 

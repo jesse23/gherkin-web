@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 
-import { executeGherkinFeature } from './services/gherkin'
+import { executeGherkinFeature } from '@gherkin-web/core/gherkin'
+// import { executeGherkinFeature } from './services/gherkin'
 // Import to register step definitions - world need not to be the same,
 // as soon as step is working. But here we use the same world
 import '../test/support/world'
